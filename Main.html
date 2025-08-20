@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BloodBridge - Lifesaving Resources</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #c62828;
+            --primary-dark: #8e0000;
+            --secondary: #0056b3;
+            --light-bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #343a40;
+            --text-light: #6c757d;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 2rem;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1.5rem 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 70%);
+            pointer-events: none;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .blood-drop {
+            display: inline-block;
+            animation: pulse 2s infinite;
+            margin: 0 8px;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        nav {
+            display: flex;
+            justify-content: center;
+            background: var(--secondary);
+            padding: 0.8rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 1rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        nav a i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        nav a.active {
+            background: white;
+            color: var(--secondary);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        nav a.active::after {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70%;
+            height: 4px;
+            background: white;
+            border-radius: 2px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        
+        section {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        section.active {
+            display: block;
+        }
+        
+        h2 {
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(0, 86, 179, 0.15);
+            display: flex;
+            align-items: center;
+        }
+        
+        h2 i {
+            margin-right: 12px;
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+        
+        form {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.2);
+        }
+        
+        button {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 1rem 1.8rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0, 86, 179, 0.3);
+        }
+        
+        button:hover {
+            background: #004494;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(0, 86, 179, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        button i {
+            margin-right: 8px;
+        }
+        
+        .dashboard {
+            background: var(--card-bg);
+            padding: 1.8rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+        
+        .dashboard h3 {
+            margin-bottom: 1.2rem;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+        }
+        
+        .dashboard h3 i {
+            margin-right: 10px;
+            font-size: 1.3rem;
+            color: var(--primary);
+        }
+        
+        ul {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 1.5rem;
+        }
+        
+        li {
+            padding: 1rem;
+            border-bottom: 1px solid #f1f1f1;
+            display: flex;
+            align-items: center;
+        }
+        
+        li:last-child {
+            border-bottom: none;
+        }
+        
+        li i {
+            color: var(--success);
+            margin-right: 12px;
+            font-size: 1.1rem;
+        }
+        
+        .status-card {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            margin: 1.5rem 0;
+        }
+        
+        .status-item {
+            flex: 1;
+            min-width: 160px;
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .status-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .status-type {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .status-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        
+        .status-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        .critical {
+            position: relative;
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            border: 2px solid #ef9a9a;
+            animation: pulse 1.5s infinite;
+        }
+        
+        .critical::after {
+            content: "URGENT";
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: var(--danger);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 3px 10px;
+            border-radius: 20px;
+            transform: rotate(5deg);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .btn-secondary {
+            background: #e9ecef;
+            color: var(--text);
+        }
+        
+        .btn-secondary:hover {
+            background: #d6d8db;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border-left: 4px solid var(--success);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 1.2rem 1.5rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+            transform: translateX(120%);
+            transition: transform 0.4s ease;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification i {
+            color: var(--success);
+            font-size: 1.8rem;
+            margin-right: 12px;
+        }
+        
+        .notification-content h4 {
+            margin-bottom: 4px;
+            color: var(--success);
+        }
+        
+        .notification-content p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                padding: 0.5rem;
+                align-items: center;
+            }
+            
+            nav a {
+                margin: 0.3rem;
+                width: 90%;
+                justify-content: center;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .status-card {
+                flex-direction: column;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-tint blood-drop"></i> BloodBridge: Lifesaving Resources</h1>
+    </header>
+    
+    <nav>
+        <a href="#" onclick="showSection('emergency')" class="active">
+            <i class="fas fa-bolt"></i> Emergency Request
+        </a>
+        <a href="#" onclick="showSection('donor')">
+            <i class="fas fa-user-friends"></i> Donor Management
+        </a>
+        <a href="#" onclick="showSection('inventory')">
+            <i class="fas fa-warehouse"></i> Blood Bank Inventory
+        </a>
+    </nav>
+    
+    <div class="container">
+        <!-- Emergency Blood Request -->
+        <section id="emergency" class="active">
+            <h2><i class="fas fa-bolt"></i> Emergency Blood Request</h2>
+            
+            <div class="status-card">
+                <div class="status-item critical">
+                    <div class="status-type">O-</div>
+                    <div class="status-value">2</div>
+                    <div class="status-label">Units Available</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-type">A+</div>
+                    <div class="status-value">15</div>
+                    <div class="status-label">Units Available</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-type">B+</div>
+                    <div class="status-value">8</div>
+                    <div class="status-label">Units Available</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-type">AB+</div>
+                    <div class="status-value">5</div>
+                    <div class="status-label">Units Available</div>
+                </div>
+            </div>
+            
+            <form id="emergencyForm">
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group">
+                            <label for="bloodType">Blood Type:</label>
+                            <input 
+                                type="text" 
+                                id="bloodType" 
+                                placeholder="Enter the blood group (e.g., A+, O-)" 
+                                pattern="^(A|B|AB|O)[+-]$" 
+                                title="Enter a valid blood group (A+, O-, etc.)" 
+                                required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="quantity">Quantity (units):</label>
+                            <input 
+                                type="number" 
+                                id="quantity" 
+                                placeholder="Enter quantity in units (e.g., 2)" 
+                                min="1" 
+                                required>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="form-group">
+                            <label for="location">Location:</label>
+                            <input 
+                                type="text" 
+                                id="location" 
+                                placeholder="Enter location (e.g., City Hospital)" 
+                                required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="urgency">Urgency Level:</label>
+                            <select id="urgency" required>
+                                <option value="high">High (Immediate need)</option>
+                                <option value="medium">Medium (Within 6 hours)</option>
+                                <option value="low">Low (Within 24 hours)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button type="button" onclick="submitEmergencyRequest()">
+                        <i class="fas fa-paper-plane"></i> Submit Request
+                    </button>
+                    <button class="btn-secondary" type="button" onclick="clearEmergencyForm()">
+                        <i class="fas fa-redo"></i> Clear Form
+                    </button>
+                </div>
+            </form>
+        </section>
+        
+        <!-- Donor Management -->
+        <section id="donor">
+            <h2><i class="fas fa-user-friends"></i> Donor Management</h2>
+            
+            <div class="dashboard">
+                <h3><i class="fas fa-calendar-alt"></i> Upcoming Blood Drives</h3>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> Blood Drive at City Hall - 04 June 2025</li>
+                    <li><i class="fas fa-map-marker-alt"></i> Community Center Drive - 10 June 2025</li>
+                </ul>
+                
+                <div class="action-buttons">
+                    <button type="button" onclick="scheduleDonation()">
+                        <i class="fas fa-calendar-check"></i> Schedule Donation
+                    </button>
+                    <button class="btn-secondary" type="button">
+                        <i class="fas fa-history"></i> View Donation History
+                    </button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Blood Bank Inventory -->
+        <section id="inventory">
+            <h2><i class="fas fa-warehouse"></i> Blood Bank Inventory</h2>
+            
+            <form id="inventoryForm">
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group">
+                            <label for="bloodTypeInventory">Blood Type:</label>
+                            <input type="text" id="bloodTypeInventory" required>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="form-group">
+                            <label for="stockLevel">Stock Level (units):</label>
+                            <input type="number" id="stockLevel" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button type="button" onclick="updateInventory()">
+                        <i class="fas fa-sync-alt"></i> Update Inventory
+                    </button>
+                    <button class="btn-secondary" type="button">
+                        <i class="fas fa-chart-bar"></i> View Inventory Report
+                    </button>
+                </div>
+            </form>
+            
+            <div class="dashboard">
+                <h3><i class="fas fa-chart-line"></i> Current Inventory Status</h3>
+                <div class="status-card">
+                    <div class="status-item">
+                        <div class="status-type">A+</div>
+                        <div class="status-value">42</div>
+                        <div class="status-label">Units Available</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-type">A-</div>
+                        <div class="status-value">18</div>
+                        <div class="status-label">Units Available</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-type">B+</div>
+                        <div class="status-value">25</div>
+                        <div class="status-label">Units Available</div>
+                    </div>
+                    <div class="status-item critical">
+                        <div class="status-type">O-</div>
+                        <div class="status-value">3</div>
+                        <div class="status-label">Units Available</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <div id="notification" class="notification">
+        <i class="fas fa-check-circle"></i>
+        <div class="notification-content">
+            <h4>Request Submitted</h4>
+            <p>Your emergency blood request has been processed</p>
+        </div>
+    </div>
+    
+    <footer>
+        <p>BloodBridge: Lifesaving Resources &copy; 2025 | Saving lives one donation at a time</p>
+    </footer>
+    
+    <script>
+        // Function to show specific section
+        function showSection(sectionId) {
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Update active nav link
+            document.querySelectorAll('nav a').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        }
+        
+        // Emergency request submission
+        function submitEmergencyRequest() {
+            const bloodType = document.getElementById('bloodType').value;
+            const quantity = document.getElementById('quantity').value;
+            const location = document.getElementById('location').value;
+            const urgency = document.getElementById('urgency').value;
+            
+            if (!bloodType || !quantity || !location || !urgency) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            showNotification(`Emergency request for ${bloodType} (${quantity} units) at ${location} submitted successfully.`);
+        }
+        
+        // Schedule donation
+        function scheduleDonation() {
+            showNotification('Your donation has been scheduled successfully.');
+        }
+        
+        // Inventory update
+        function updateInventory() {
+            const bloodType = document.getElementById('bloodTypeInventory').value;
+            const stockLevel = document.getElementById('stockLevel').value;
+            
+            if (!bloodType || !stockLevel) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            showNotification(`Inventory for ${bloodType} updated to ${stockLevel} units successfully.`);
+        }
+        
+        // Clear emergency form
+        function clearEmergencyForm() {
+            document.getElementById('bloodType').value = '';
+            document.getElementById('quantity').value = '';
+            document.getElementById('location').value = '';
+            document.getElementById('urgency').value = 'high';
+        }
+        
+        // Show notification
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            const content = notification.querySelector('.notification-content p');
+            content.textContent = message;
+            
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Initialize form with some default values for demo
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('quantity').value = '2';
+            document.getElementById('location').value = 'City Hospital Emergency Room';
+            document.getElementById('stockLevel').value = '15';
+        });
+    </script>
+</body>
+</html>
